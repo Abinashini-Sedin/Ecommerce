@@ -1,0 +1,51 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #fafafa;
+}
+
+.app-main {
+  flex: 1;
+  background-color: #fafafa;
+}
+
+.app-footer {
+  background-color: #fff;
+  color: #666;
+  text-align: center;
+  padding: 24px 20px;
+  margin-top: auto;
+  border-top: 1px solid #eee;
+  font-size: 13px;
+}
+
+.app-footer p {
+  margin: 0;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app-footer {
+    padding: 20px 15px;
+  }
+
+  .app-footer p {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-footer {
+    padding: 15px 10px;
+  }
+}
