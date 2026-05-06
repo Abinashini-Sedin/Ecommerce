@@ -1,16 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 import { Link } from "react-router-dom";
+import "./ProductCard.css";
 
 const ProductCard = ({ product }) => {
     const dispatch = useDispatch();
     const viewMode = useSelector(state => state.products.viewMode);
 
     const getStockInfo = () => {
-        if (product.stock > 5) return { text: "In Stock", color: "green" };
-        if (product.stock > 1) return { text: "Only a few left", color: "orange" };
-        if (product.stock === 1) return { text: "Only 1 left", color: "red" };
-        return { text: "Unavailable", color: "gray" };
+        if (product.stock > 5) return { text: "In Stock", className: "green" };
+        if (product.stock > 1) return { text: "Only a few left", className: "orange" };
+        if (product.stock === 1) return { text: "Only 1 left", className: "red" };
+        return { text: "Unavailable", className: "gray" };
     };
 
     const stockInfo = getStockInfo();
@@ -18,52 +19,31 @@ const ProductCard = ({ product }) => {
     const isList = viewMode === "list";
 
     return (
-        <div style={{ 
-            border: "1px solid #ddd", 
-            padding: 15, 
-            borderRadius: 8, 
-            display: "flex", 
-            flexDirection: isList ? "row" : "column",
-            gap: 15,
-            alignItems: isList ? "center" : "flex-start",
-            backgroundColor: "#fff"
-        }}>
+        <div className={`product-card ${isList ? "list-view" : "grid-view"}`}>
             <img 
                 src={product.image} 
                 alt={product.title} 
-                style={{ 
-                    width: isList ? "100px" : "100%", 
-                    height: isList ? "100px" : "200px", 
-                    objectFit: "contain" 
-                }} 
+                className="product-card-image"
             />
             
-            <div style={{ flex: 1, width: "100%", display: "flex", flexDirection: "column" }}>
-                <Link to={`/product/${product.id}`} style={{ textDecoration: "none", color: "#333" }}>
-                    <h4 style={{ margin: "0 0 10px 0", fontSize: "16px", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+            <div className="product-card-info">
+                <Link to={`/product/${product.id}`} className="product-card-link">
+                    <h4 className="product-card-title">
                         {product.title}
                     </h4>
                 </Link>
                 
-                <p style={{ margin: "5px 0", fontWeight: "bold", fontSize: "18px" }}>₹{product.price}</p>
+                <p className="product-card-price">₹{product.price}</p>
                 
-                <p style={{ margin: "5px 0", color: stockInfo.color, fontSize: "14px", fontWeight: "bold" }}>
+                <p className={`product-card-stock ${stockInfo.className}`}>
                     {stockInfo.text}
                 </p>
 
-                <div style={{ marginTop: "auto", paddingTop: 15 }}>
+                <div className="product-card-actions">
                     <button 
                         onClick={() => dispatch(addToCart(product))}
                         disabled={product.stock === 0}
-                        style={{
-                            padding: "8px 16px",
-                            backgroundColor: product.stock === 0 ? "#ccc" : "#007bff",
-                            color: "white",
-                            border: "none",
-                            borderRadius: 4,
-                            cursor: product.stock === 0 ? "not-allowed" : "pointer",
-                            width: isList ? "auto" : "100%"
-                        }}
+                        className="add-to-cart-btn"
                     >
                         {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
                     </button>

@@ -4,7 +4,7 @@ const useInfiniteScroll = (callback) => {
     const ref = useRef();
     const [hasScrolled, setHasScrolled] = useState(false);
 
-    // Only allow infinite scroll to trigger after the user has scrolled down at least once
+
     useEffect(() => {
         const onScroll = () => {
             if (window.scrollY > 10) {

@@ -4,6 +4,7 @@ import { fetchProducts, setSearchQuery, setCategory, setViewMode, loadMore } fro
 import ProductCard from "../components/ProductCard";
 import useDebounce from "../hooks/useDebounce";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
+import "./ProductList.css";
 
 const ProductList = () => {
   const dispatch = useDispatch();
@@ -34,54 +35,49 @@ const ProductList = () => {
 
   const hasMore = displayedItems.length < filteredItems.length;
 
-  if (loading && displayedItems.length === 0) return <div style={{ padding: 20, textAlign: "center" }}><h2>Loading products...</h2></div>;
-  if (error) return <div style={{ padding: 20, color: "red", textAlign: "center" }}><h2>{error}</h2></div>;
+  if (loading && displayedItems.length === 0) return (
+    <div className="loading-products">
+      <h2>Loading products...</h2>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="error-msg">
+      <h2>{error}</h2>
+    </div>
+  );
 
   return (
-    <div style={{ maxWidth: 1200, margin: "0 auto", padding: 20 }}>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 15, marginBottom: 20, alignItems: "center", backgroundColor: "#f8f9fa", padding: 15, borderRadius: 8 }}>
+    <div className="product-list-page">
+      <div className="product-filters-bar">
         <input
           type="text"
           placeholder="Search products..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{ flex: 1, minWidth: 200, padding: "10px 15px", borderRadius: 4, border: "1px solid #ccc", fontSize: 16 }}
+          className="search-input-field"
         />
         
         <select 
             value={selectedCategory} 
             onChange={(e) => dispatch(setCategory(e.target.value))}
-            style={{ padding: "10px 15px", borderRadius: 4, border: "1px solid #ccc", fontSize: 16 }}
+            className="category-select-field"
         >
             {categories.map(cat => (
                 <option key={cat} value={cat}>{cat}</option>
             ))}
         </select>
 
-        <div style={{ display: "flex", gap: 10 }}>
+        <div className="view-toggle-group">
             <button 
                 onClick={() => dispatch(setViewMode("grid"))}
-                style={{ 
-                    padding: "10px 15px", 
-                    backgroundColor: viewMode === "grid" ? "#007bff" : "#fff", 
-                    color: viewMode === "grid" ? "#fff" : "#333",
-                    border: "1px solid #ccc",
-                    borderRadius: 4,
-                    cursor: "pointer"
-                }}
+                className={`view-mode-btn ${viewMode === "grid" ? "active" : ""}`}
             >
                 Grid
             </button>
             <button 
                 onClick={() => dispatch(setViewMode("list"))}
-                style={{ 
-                    padding: "10px 15px", 
-                    backgroundColor: viewMode === "list" ? "#007bff" : "#fff", 
-                    color: viewMode === "list" ? "#fff" : "#333",
-                    border: "1px solid #ccc",
-                    borderRadius: 4,
-                    cursor: "pointer"
-                }}
+                className={`view-mode-btn ${viewMode === "list" ? "active" : ""}`}
             >
                 List
             </button>
@@ -89,16 +85,11 @@ const ProductList = () => {
       </div>
 
       {displayedItems.length === 0 && !loading ? (
-          <div style={{ textAlign: "center", padding: 40, color: "#666" }}>
+          <div className="no-results-msg">
               <h3>No products found matching your criteria.</h3>
           </div>
       ) : (
-          <div style={{ 
-            display: viewMode === "grid" ? "grid" : "flex", 
-            flexDirection: "column",
-            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", 
-            gap: 20 
-          }}>
+          <div className={`products-container ${viewMode === "grid" ? "grid-view" : "list-view"}`}>
             {displayedItems.map((p, index) => (
               <div key={p.id} ref={index === displayedItems.length - 1 ? sentinelRef : null}>
                   <ProductCard product={p} />
@@ -108,7 +99,7 @@ const ProductList = () => {
       )}
       
       {hasMore && (
-          <div style={{ textAlign: "center", padding: 20, marginTop: 20, color: "#666" }}>
+          <div className="loading-more-msg">
               Loading more products...
           </div>
       )}

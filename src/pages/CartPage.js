@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, updateQuantity } from "../features/cart/cartSlice";
+import "./CartPage.css";
 
 const CartPage = () => {
   const items = useSelector(state => state.cart.items);
@@ -14,24 +15,28 @@ const CartPage = () => {
   const finalTotal = total + gst;
 
   if (items.length === 0) {
-      return <div style={{ padding: 40, textAlign: "center" }}><h2>Your cart is empty</h2></div>;
+      return (
+        <div className="empty-cart-message">
+          <h2>Your cart is empty</h2>
+        </div>
+      );
   }
 
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto", padding: 20 }}>
+    <div className="cart-page">
       <h2>Shopping Cart</h2>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 15, marginBottom: 30 }}>
+      <div className="cart-items-list">
         {items.map(item => (
-          <div key={item.id} style={{ display: "flex", alignItems: "center", gap: 20, padding: 15, borderBottom: "1px solid #ddd", backgroundColor: "#fff" }}>
-            <img src={item.image} alt={item.title} style={{ width: 60, height: 60, objectFit: "contain" }} />
+          <div key={item.id} className="cart-item-row">
+            <img src={item.image} alt={item.title} className="cart-item-image" />
             
-            <div style={{ flex: 1 }}>
-              <h4 style={{ margin: "0 0 5px 0" }}>{item.title}</h4>
-              <p style={{ margin: 0, color: "#666" }}>₹{item.price} each</p>
+            <div className="cart-item-details">
+              <h4 className="cart-item-title">{item.title}</h4>
+              <p className="cart-item-price">₹{item.price} each</p>
             </div>
             
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div className="cart-item-controls">
                 <label>Qty:</label>
                 <input 
                     type="number" 
@@ -39,17 +44,17 @@ const CartPage = () => {
                     max={item.stock} 
                     value={item.quantity} 
                     onChange={(e) => dispatch(updateQuantity({ id: item.id, quantity: parseInt(e.target.value) || 1 }))}
-                    style={{ width: 60, padding: 5 }}
+                    className="cart-qty-input"
                 />
             </div>
             
-            <div style={{ width: 100, textAlign: "right", fontWeight: "bold" }}>
+            <div className="cart-item-subtotal">
                 ₹{(item.price * item.quantity).toFixed(2)}
             </div>
 
             <button 
                 onClick={() => dispatch(removeFromCart(item.id))}
-                style={{ padding: "5px 10px", backgroundColor: "#dc3545", color: "white", border: "none", borderRadius: 4, cursor: "pointer" }}
+                className="remove-item-btn"
             >
                 Remove
             </button>
@@ -57,21 +62,21 @@ const CartPage = () => {
         ))}
       </div>
 
-      <div style={{ borderTop: "2px solid #333", paddingTop: 20, display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", width: 300, marginBottom: 10 }}>
+      <div className="cart-summary-section">
+          <div className="cart-summary-row">
               <span>Subtotal:</span>
               <span>₹{total.toFixed(2)}</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", width: 300, marginBottom: 10 }}>
+          <div className="cart-summary-row">
               <span>GST (10%):</span>
               <span>₹{gst.toFixed(2)}</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", width: 300, marginBottom: 20, fontSize: 20, fontWeight: "bold" }}>
+          <div className="cart-summary-total">
               <span>Total:</span>
               <span>₹{finalTotal.toFixed(2)}</span>
           </div>
           
-          <button style={{ padding: "12px 30px", backgroundColor: "#007bff", color: "white", fontSize: 18, border: "none", borderRadius: 4, cursor: "pointer" }}>
+          <button className="checkout-btn">
               Proceed to Checkout
           </button>
       </div>

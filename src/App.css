@@ -28,12 +28,13 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
   .app-footer {
     padding: 20px 15px;
